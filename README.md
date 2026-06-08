@@ -13,6 +13,8 @@ Este repositorio contiene el trabajo desarrollado a lo largo de la asignatura **
 
 Los contenidos del repositorio combinan programación en Python, simulación numérica, representación gráfica de resultados y redacción de informes o notebooks explicativos. El trabajo se ha realizado principalmente con **Visual Studio Code**, **Python 3.14.3** y **Google Colab** para la visualización y ejecución de notebooks de Jupyter.
 
+Además, los códigos e informes del los contenidos obligatorios se han realizado en conjunto con el grupo "aretes". Cuyos miembros son: Carmen Bonal de Manuel, Pau Gomila Tarongí, Claudia González Arnaiz, Mario Hernández Cuéllar, María Dolores Navarro Ortiz y Clara Piñero García.
+
 ---
 
 ## Índice de contenidos del repositorio
