@@ -1,0 +1,46 @@
+{
+  "id": "MCP_SCIKI_N8N_MARIO_COMPUTACIONAL_REVIEW_RESOURCE_V1",
+  "marker": "MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1",
+  "status": "active",
+  "activated_at": "2026-06-29",
+  "upstream_repository": "marioehercue/Computacional_Mario",
+  "contribution_repository": "jbermejovega/Computacional_Mario",
+  "branch": "codex/deep-mario-notebook-review",
+  "scope": "mario_fisica_computacional_notebook_by_notebook",
+  "mode": "read_only_static_notebook_json_review",
+  "authority": {
+    "human_review": true,
+    "mcp_resource": true,
+    "sciki_map": true,
+    "n8n_export": true,
+    "github_actions_invariant_workflow": true
+  },
+  "entrypoints": {
+    "report": "docs/revision_fisica_computacional/REVISION_PROFUNDA_NOTEBOOKS_MARIO_V1.md",
+    "script": "scripts/revision_fisica_computacional/notebook_deep_review.py",
+    "workflow": ".github/workflows/fisica-computacional-notebook-review.yml",
+    "sciki": "sciki/fisica-computacional/mario-notebook-review.sciki.yaml",
+    "n8n": "n8n/mario-fisica-computacional-deep-review.workflow.json"
+  },
+  "notebooks": [
+    "trabajos/laboratorio/COMPU_SISTEMA_SOLAR.ipynb",
+    "trabajos/laboratorio/ISING.ipynb",
+    "trabajos/laboratorio/Jup_voluntario_hopfield_mariohc.ipynb",
+    "trabajos/laboratorio/Jup_voluntario_shrodinger_mariohc.ipynb"
+  ],
+  "invariants": {
+    "notebook_by_notebook": true,
+    "no_notebook_code_execution": true,
+    "contents_read_only": true,
+    "replay_safe": true,
+    "large_notebook_outputs_reported": true,
+    "generated_witness_required": true,
+    "workflow_must_not_require_secrets": true,
+    "workflow_must_not_use_marketplace_actions_for_checkout": true
+  },
+  "outputs": {
+    "json_witness": "build/revision_fisica_computacional/notebook-review-witness.json",
+    "markdown_witness": "build/revision_fisica_computacional/notebook-review-witness.md",
+    "github_step_summary": true
+  }
+}
