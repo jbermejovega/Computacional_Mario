@@ -1,0 +1,101 @@
+name: Mario Fisica Computacional Notebook Deep Review
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'trabajos/laboratorio/*.ipynb'
+      - 'docs/revision_fisica_computacional/**'
+      - 'mcp/resources/mario-computacional-notebook-review.resource.json'
+      - 'sciki/fisica-computacional/mario-notebook-review.sciki.yaml'
+      - 'n8n/mario-fisica-computacional-deep-review.workflow.json'
+      - 'scripts/revision_fisica_computacional/notebook_deep_review.py'
+      - '.github/workflows/fisica-computacional-notebook-review.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'trabajos/laboratorio/*.ipynb'
+      - 'docs/revision_fisica_computacional/**'
+      - 'mcp/resources/mario-computacional-notebook-review.resource.json'
+      - 'sciki/fisica-computacional/mario-notebook-review.sciki.yaml'
+      - 'n8n/mario-fisica-computacional-deep-review.workflow.json'
+      - 'scripts/revision_fisica_computacional/notebook_deep_review.py'
+      - '.github/workflows/fisica-computacional-notebook-review.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  deep-notebook-review:
+    name: MCP SCIKI N8N Mario invariant notebook review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout without marketplace actions
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          basic_auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git init -b work .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic ${basic_auth}" fetch --depth=1 origin "${GITHUB_SHA}"
+          git checkout --force FETCH_HEAD
+
+      - name: Validate activated review resources
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_files=(
+            'docs/revision_fisica_computacional/REVISION_PROFUNDA_NOTEBOOKS_MARIO_V1.md'
+            'mcp/resources/mario-computacional-notebook-review.resource.json'
+            'sciki/fisica-computacional/mario-notebook-review.sciki.yaml'
+            'n8n/mario-fisica-computacional-deep-review.workflow.json'
+            'scripts/revision_fisica_computacional/notebook_deep_review.py'
+          )
+
+          for file in "${required_files[@]}"; do
+            test -f "$file"
+          done
+
+          while IFS='|' read -r file marker; do
+            grep -q "$marker" "$file"
+          done <<'EOF'
+          docs/revision_fisica_computacional/REVISION_PROFUNDA_NOTEBOOKS_MARIO_V1.md|MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1
+          docs/revision_fisica_computacional/REVISION_PROFUNDA_NOTEBOOKS_MARIO_V1.md|MCP_SCIKI_N8N_MARIO_COMPUTACIONAL_REVIEW_RESOURCE_V1
+          mcp/resources/mario-computacional-notebook-review.resource.json|"status": "active"
+          mcp/resources/mario-computacional-notebook-review.resource.json|"notebook_by_notebook": true
+          sciki/fisica-computacional/mario-notebook-review.sciki.yaml|SCI_KI_MARIO_FISICA_COMPUTACIONAL_NOTEBOOK_REVIEW_V1
+          n8n/mario-fisica-computacional-deep-review.workflow.json|Mario Fisica Computacional Deep Notebook Review
+          scripts/revision_fisica_computacional/notebook_deep_review.py|MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1
+          EOF
+
+      - name: Generate deep review witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/revision_fisica_computacional/notebook_deep_review.py
+          test -s build/revision_fisica_computacional/notebook-review-witness.json
+          test -s build/revision_fisica_computacional/notebook-review-witness.md
+
+          {
+            echo '# Mario Fisica Computacional Deep Notebook Review'
+            echo
+            echo '- marker: MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1'
+            echo '- resource: MCP_SCIKI_N8N_MARIO_COMPUTACIONAL_REVIEW_RESOURCE_V1'
+            echo '- upstream: marioehercue/Computacional_Mario'
+            echo '- contribution: jbermejovega/Computacional_Mario'
+            echo '- mcp_resource_active: true'
+            echo '- sciki_map_active: true'
+            echo '- n8n_workflow_exported: true'
+            echo '- notebook_by_notebook: true'
+            echo '- no_notebook_code_execution: true'
+            echo '- replay_safe: true'
+            echo
+            cat build/revision_fisica_computacional/notebook-review-witness.md
+          } >> "$GITHUB_STEP_SUMMARY"
