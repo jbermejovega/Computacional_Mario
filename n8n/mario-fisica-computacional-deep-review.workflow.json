@@ -1,0 +1,133 @@
+{
+  "name": "Mario Fisica Computacional Deep Notebook Review",
+  "active": false,
+  "versionId": "MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "resource": "MCP_SCIKI_N8N_MARIO_COMPUTACIONAL_REVIEW_RESOURCE_V1",
+    "mode": "read_only_static_notebook_json_review",
+    "requiresSecrets": false
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "marker",
+              "value": "MARIO_FISICA_COMPUTACIONAL_DEEP_NOTEBOOK_REVIEW_V1"
+            },
+            {
+              "name": "resource",
+              "value": "MCP_SCIKI_N8N_MARIO_COMPUTACIONAL_REVIEW_RESOURCE_V1"
+            },
+            {
+              "name": "upstream_repository",
+              "value": "marioehercue/Computacional_Mario"
+            },
+            {
+              "name": "contribution_repository",
+              "value": "jbermejovega/Computacional_Mario"
+            },
+            {
+              "name": "report",
+              "value": "docs/revision_fisica_computacional/REVISION_PROFUNDA_NOTEBOOKS_MARIO_V1.md"
+            },
+            {
+              "name": "workflow",
+              "value": ".github/workflows/fisica-computacional-notebook-review.yml"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "mcp_resource_active",
+              "value": true
+            },
+            {
+              "name": "sciki_map_active",
+              "value": true
+            },
+            {
+              "name": "notebook_code_execution_allowed",
+              "value": false
+            },
+            {
+              "name": "requires_secrets",
+              "value": false
+            }
+          ]
+        }
+      },
+      "id": "set-review-scope",
+      "name": "Set Review Scope",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "json": [
+            {
+              "name": "notebooks",
+              "value": "={{ [\"trabajos/laboratorio/COMPU_SISTEMA_SOLAR.ipynb\", \"trabajos/laboratorio/ISING.ipynb\", \"trabajos/laboratorio/Jup_voluntario_hopfield_mariohc.ipynb\", \"trabajos/laboratorio/Jup_voluntario_shrodinger_mariohc.ipynb\"] }}"
+            },
+            {
+              "name": "required_outputs",
+              "value": "={{ [\"build/revision_fisica_computacional/notebook-review-witness.json\", \"build/revision_fisica_computacional/notebook-review-witness.md\"] }}"
+            },
+            {
+              "name": "review_states",
+              "value": "={{ { BLOCKED: \"delete_restore_or_replace\", NEEDS_REVISION: \"revise_before_final_grading\", READY_FOR_CONTENT_REVIEW: \"continue_to_scientific_review\" } }}"
+            }
+          ]
+        }
+      },
+      "id": "activate-checklist",
+      "name": "Activate Review Checklist",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [520, 0]
+    },
+    {
+      "parameters": {},
+      "id": "review-ready",
+      "name": "Review Resource Ready",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [780, 0]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [[{"node": "Set Review Scope", "type": "main", "index": 0}]]
+    },
+    "Set Review Scope": {
+      "main": [[{"node": "Activate Review Checklist", "type": "main", "index": 0}]]
+    },
+    "Activate Review Checklist": {
+      "main": [[{"node": "Review Resource Ready", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "tags": [
+    {"name": "fisica-computacional"},
+    {"name": "mario"},
+    {"name": "mcp"},
+    {"name": "sciki"},
+    {"name": "invariant-workflow"}
+  ]
+}
